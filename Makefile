@@ -23,4 +23,4 @@ build:
 
 .PHONY: run
 run:
-	./build/bin/$(PROJECT) image.png image.bin
+	./build/bin/$(PROJECT) image.png image.bin 4 0

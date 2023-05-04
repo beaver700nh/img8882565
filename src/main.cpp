@@ -1,10 +1,14 @@
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 
 #include <png.h>
 
 int main(int argc, char *argv[]) {
-  if (argc < 3) {
+  if (argc < 5) {
+    puts("Usage: img8882565 in.png out.bin <pixelsize> <endian>");
+    puts("\tpixelsize: 3 for RGB, 4 for RGBA");
+    puts("\tendian: 0 for native, 1 for reverse");
     return 1;
   }
 
@@ -21,12 +25,20 @@ int main(int argc, char *argv[]) {
 
   png_bytepp pixels = png_get_rows(pngptr, pnginfo);
 
+  unsigned int size = atoi(argv[3]);
+  bool swap = atoi(argv[4]);
+
   for (unsigned int y = 0; y < png_get_image_height(pngptr, pnginfo); ++y) {
     for (unsigned int x = 0; x < png_get_image_width(pngptr, pnginfo); ++x) {
-      uint16_t r = pixels[y][4*x + 0];
-      uint16_t g = pixels[y][4*x + 1];
-      uint16_t b = pixels[y][4*x + 2];
+      uint16_t r = pixels[y][size*x + 0];
+      uint16_t g = pixels[y][size*x + 1];
+      uint16_t b = pixels[y][size*x + 2];
       uint16_t out = (r >> 3 << 11) | (g >> 2 << 5) | (b >> 3);
+
+      if (swap) {
+        out = __builtin_bswap16(out);
+      }
+
       fwrite(&out, 2, 1, dest);
     }
   }
