@@ -1,3 +1,0 @@
-/home/runner/img8882565/build/CMakeFiles/img8882565.dir
-/home/runner/img8882565/build/CMakeFiles/edit_cache.dir
-/home/runner/img8882565/build/CMakeFiles/rebuild_cache.dir
